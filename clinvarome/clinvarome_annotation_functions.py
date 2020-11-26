@@ -2,7 +2,7 @@
 # Gather all genes annotations : gene, gene_id,
 # (AF, FAF,) diseases, clinical features, mecanismes counts, nhomalt.
 # Give score for genes according their confidence criteria
-
+import gzip
 import pandas as pd
 import numpy as np
 from datetime import datetime
@@ -229,7 +229,7 @@ def first_gene_date(clinvarome_df, compare_gene):
     """
     Return the first occurence of pathogenic variant for a gene in ClinVar.
     """
-    compare_gene_df = pd.read_csv(compare_gene, sep="\t")
+    compare_gene_df = pd.read_csv(compare_gene, sep="\t", compression="gzip")
     compare_gene_df = compare_gene_df[
         compare_gene_df["pathogenic_class_status"] == "NEW_PATHOGENICITY"
     ]
@@ -254,7 +254,7 @@ def last_gene_date(clinvarome_df, compare_variant):
     """
     Return the last occurence of pathogenic variant for a gene in ClinVar.
     """
-    compare_variant_df = pd.read_csv(compare_variant, sep="\t")
+    compare_variant_df = pd.read_csv(compare_variant, sep="\t", compression="gzip")
     filter_patho = (compare_variant_df["breaking_change"] == "major") & (
         (compare_variant_df["new_classification"] == "Pathogenic")
         | (compare_variant_df["new_classification"] == "Likely_pathogenic")

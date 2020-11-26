@@ -29,14 +29,14 @@ def get_args():
         action="store",
         dest="compare_gene",
         required=True,
-        help="Variant Alert! compare gene concatenation file of all previous ClinVar release.",
+        help="Variant Alert! compare gene concatenation gzip file of all previous ClinVar release.",
     )
     parser.add_argument(
         "--compare-variant",
         action="store",
         dest="compare_variant",
         required=True,
-        help="Variant Alert! compare variant concatenation file of all previous ClinVar release.",
+        help="Variant Alert! compare variant concatenation gzip file of all previous ClinVar release.",
     )
     parser.add_argument(
         "--gnomad",

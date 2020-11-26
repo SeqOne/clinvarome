@@ -1,5 +1,0 @@
-variant_id	clinvar_id	old_classification	new_classification	breaking_change	confidence	reclassification_status	gene_info	gene_info_id	name_clinvar_old	name_clinvar_new
-GRCh38_6_3224828_C_T	88897	..	Pathogenic	major	no_assertion_criteria_provided	..	TUBB2B	347733	20170529	20170703
-GRCh38_6_3225556_G_A	378836	..	Pathogenic	major	criteria_provided,_single_submitter	..	TUBB2B	347733	20170529	20170703
-GRCh38_6_3225797_C_T	212497	..	Pathogenic/Likely_pathogenic	major	criteria_provided,_multiple_submitters,_no_conflicts	..	TUBB2B	347733	20170529	20170703
-GRCh38_6_3225322_T_C	39721	..	Pathogenic	major	no_assertion_criteria_provided	..	TUBB2B	347733	20181204	20181231
