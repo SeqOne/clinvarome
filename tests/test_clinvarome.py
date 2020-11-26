@@ -21,11 +21,11 @@ from clinvarome.clinvarome_annotation_functions import (
     merge_dataframe,
 )
 
-CLIN_VCF = "tests/full_data/clinvar_GRCh38_2020-11.vcf"
+CLIN_VCF = "tests/full_data/clinvar_GRCh38_2020-11.vcf.gz"
 CLIN_VCF_GNOMAD = "tests/toys/clinvar_gnomad_anno.vcf"
-COMPARE_GENE = "tests/toys/compare-gene.tsv"
-COMPARE_VARIANT = "tests/toys/compare-variant.tsv"
-CLINVAROME = "tests/toys/clinvarome.tsv"
+COMPARE_GENE = "tests/toys/compare-gene.tsv.gz"
+COMPARE_VARIANT = "tests/toys/compare-variant.tsv.gz"
+CLINVAROME = "tests/toys/clinvarome.tsv.gz"
 
 VCF = pysam.VariantFile(CLIN_VCF)
 nb_record = 1
