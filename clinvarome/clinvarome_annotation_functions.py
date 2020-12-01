@@ -2,10 +2,8 @@
 # Gather all genes annotations : gene, gene_id,
 # (AF, FAF,) diseases, clinical features, mecanismes counts, nhomalt.
 # Give score for genes according their confidence criteria
-import gzip
 import pandas as pd
 import numpy as np
-from datetime import datetime
 import pysam
 from scipy.stats import poisson
 from pyselib.logger.logger import get_logger

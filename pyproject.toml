@@ -13,6 +13,12 @@ sklearn = "^0.0"
 scipy = "^1.5.4"
 joblib = "^0.17.0"
 threadpoolctl = "^2.1.0"
+flake8 = "^3.8.4"
+coverage = "^5.3"
+hypothesis = "^5.41.4"
+pympler = "^0.9"
+six = "^1.15.0"
+"zope.interface" = "^5.2.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

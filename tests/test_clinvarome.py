@@ -18,7 +18,6 @@ from clinvarome.clinvarome_annotation_functions import (
     get_max_nhomalt_by_gene,
     gene_first_pathogenic_entry_date,
     gene_latest_pathogenic_entry_date,
-    merge_dataframe,
 )
 
 CLIN_VCF = "tests/full_data/clinvar_GRCh38_2020-11.vcf.gz"
