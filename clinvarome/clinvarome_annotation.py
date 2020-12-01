@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import argparse
 import os
 from clinvarome.clinvarome_annotation_functions import gather_annotation
