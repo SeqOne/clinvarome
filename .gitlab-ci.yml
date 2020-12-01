@@ -3,6 +3,8 @@ test clinvarome lib:
   stage: tool_test
   script:
     - cd tools/clinvarome
+    - pip install poetry
+    - poetry install
     - poetry run flake8
     - poetry run pytest -v
   rules:
