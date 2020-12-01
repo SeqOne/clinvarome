@@ -11,13 +11,13 @@ from clinvarome.clinvarome_annotation_functions import (
     calcul_max_AF,
     gather_dict_gene_max_AF,
     get_AF_max_by_gene,
-    meca_by_variant,
-    count_type_meca,
-    get_MC_dataframe,
+    mol_consequences_by_variant,
+    count_type_mol_consequences,
+    get_mol_consequences_dataframe,
     get_nhomalt,
     get_max_nhomalt_by_gene,
-    first_gene_date,
-    last_gene_date,
+    gene_first_pathogenic_entry_date,
+    gene_latest_pathogenic_entry_date,
     merge_dataframe,
 )
 
@@ -120,9 +120,9 @@ def test_get_AF_max_by_gene():
     assert df["FAF"][0] == 0.75
 
 
-def test_meca_by_variant():
+def test_mol_consequences_by_variant():
     gene_var_dict = {}
-    meca_by_variant(RECORDS["CLN"], gene_var_dict)
+    mol_consequences_by_variant(RECORDS["CLN"], gene_var_dict)
     assert gene_var_dict["AGRN"] == ["missense_inframe"]
 
 
@@ -130,7 +130,7 @@ def test_meca_by_variant():
 # mecanism   missense_inframe  stop_fs_splice
 # gene_info
 # GENE                      3               1
-def test_count_type_meca():
+def test_count_type_mol_consequences():
     gene_var_dict = {
         "GENE": [
             "missense_inframe",
@@ -139,11 +139,11 @@ def test_count_type_meca():
             "stop_fs_splice",
         ]
     }
-    gene_meca_count = count_type_meca(gene_var_dict)
+    gene_meca_count = count_type_mol_consequences(gene_var_dict)
     print(gene_meca_count)
     assert gene_meca_count["GENE"] == [[[1, "stop_fs_splice"], [3, "missense_inframe"]]]
     # For the dataframe
-    df = get_MC_dataframe(gene_var_dict)
+    df = get_mol_consequences_dataframe(gene_var_dict)
     assert df["stop_fs_splice"]["GENE"] == 1
     assert df["missense_inframe"]["GENE"] == 3
 
@@ -163,14 +163,14 @@ def test_get_max_nhomalt_by_gene():
 
 def test_first_gene_date():
     clinvarome_df = pd.read_csv(CLINVAROME, sep="\t")
-    df = first_gene_date(clinvarome_df, COMPARE_GENE)
+    df = gene_first_pathogenic_entry_date(clinvarome_df, COMPARE_GENE)
     assert df["gene_info"][0] == "TUBB2B"
     assert str(df["first_path_var_date"][0]) == "2017-07-03 00:00:00"
 
 
 def test_last_gene_date():
     clinvarome_df = pd.read_csv(CLINVAROME, sep="\t")
-    df = last_gene_date(clinvarome_df, COMPARE_VARIANT)
+    df = gene_latest_pathogenic_entry_date(clinvarome_df, COMPARE_VARIANT)
     # print(df)
     assert df["gene_info"][3] == "TUBB2B"
     assert str(df["last_pathogenic_variant"][3]) == "2018-12-31 00:00:00"

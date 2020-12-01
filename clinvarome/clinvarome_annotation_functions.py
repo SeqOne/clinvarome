@@ -128,9 +128,9 @@ def get_AF_max_by_gene(gene_AF_dict):
 
 
 # Molecular consequence counts
-def meca_by_variant(record, gene_var_dict):
+def mol_consequences_by_variant(record, gene_var_dict):
     """
-    Parse molecular consequences available for a variant and
+    Parse molecular consequences (mc) available for a variant and
     return the highest predicted effect
     """
     geneinfo = record.info["GENEINFO"].split("|")[0].split(":")[0]
@@ -148,30 +148,30 @@ def meca_by_variant(record, gene_var_dict):
         gene_var_dict[geneinfo].append("Not_provided")
 
 
-def count_type_meca(gene_var_dict):
+def count_type_mol_consequences(gene_var_dict):
     """
-    Count occurence of molecular consequence from pathogenic
+    Count occurence of molecular consequence (mc)from pathogenic
     variant for each gene
     """
-    gene_meca_count = {}
+    gene_mc_count = {}
     for key, values in gene_var_dict.items():
-        list_MC = []
+        list_mc = []
         for k in MC_SHORT.keys():
             if k in values:
                 count = values.count(k)
-                list_MC.append([count, k])
-        gene_meca_count.setdefault(key, [])
-        gene_meca_count[key].append(list_MC)
-    return gene_meca_count
+                list_mc.append([count, k])
+        gene_mc_count.setdefault(key, [])
+        gene_mc_count[key].append(list_mc)
+    return gene_mc_count
 
 
-def get_MC_dataframe(gene_var_dict):
+def get_mol_consequences_dataframe(gene_var_dict):
     """
-    Format molecular consequences occurences by gene dictionary into dataframe.
+    Format molecular consequences occurences (mc) by gene dictionary into dataframe.
     """
-    gene_meca_count = count_type_meca(gene_var_dict)
+    gene_mc_count = count_type_mol_consequences(gene_var_dict)
     df_tot = pd.DataFrame()
-    for key, values in gene_meca_count.items():
+    for key, values in gene_mc_count.items():
         for k in range(len(values[0])):
             mecanism_dict = {}
             mecanism_dict[key] = values[0][k]
@@ -225,9 +225,9 @@ def get_max_nhomalt_by_gene(gene_nhomalt):
 
 
 # Gene date
-def first_gene_date(clinvarome_df, compare_gene):
+def gene_first_pathogenic_entry_date(clinvarome_df, compare_gene):
     """
-    Return the first occurence of pathogenic variant for a gene in ClinVar.
+    Return the first occurence of a (lickely) pathogenic variant for a gene in ClinVar.
     """
     compare_gene_df = pd.read_csv(compare_gene, sep="\t", compression="gzip")
     compare_gene_df = compare_gene_df[
@@ -250,9 +250,9 @@ def first_gene_date(clinvarome_df, compare_gene):
     return clinvar_gene
 
 
-def last_gene_date(clinvarome_df, compare_variant):
+def gene_latest_pathogenic_entry_date(clinvarome_df, compare_variant):
     """
-    Return the last occurence of pathogenic variant for a gene in ClinVar.
+    Return the last occurence of (likely) pathogenic variant for a gene in ClinVar.
     """
     compare_variant_df = pd.read_csv(compare_variant, sep="\t", compression="gzip")
     filter_patho = (compare_variant_df["breaking_change"] == "major") & (
@@ -439,16 +439,16 @@ def gather_annotation(vcf_file, clinvarome, compare_gene, compare_variant, gnoma
             or (record.info["CLNSIG"][0] == "Likely_pathogenic")
         ):
             gather_clinical_features(record, gene_finding, gene_disease)
-            meca_by_variant(record, gene_MC)
+            mol_consequences_by_variant(record, gene_MC)
             if gnomad:
                 gather_dict_gene_max_AF(record, gene_AF)
                 get_nhomalt(record, var_nhomalt)
     logger.info("Data processing into DataFrame")
     clinvarome_df = pd.read_csv(clinvarome, sep="\t")
     gene_features_df = get_clinical_dataframe(gene_disease, gene_finding)
-    gene_MC_df = get_MC_dataframe(gene_MC)
-    first_date_df = first_gene_date(clinvarome_df, compare_gene)
-    last_date_df = last_gene_date(clinvarome_df, compare_variant)
+    gene_MC_df = get_mol_consequences_dataframe(gene_MC)
+    first_date_df = gene_first_pathogenic_entry_date(clinvarome_df, compare_gene)
+    last_date_df = gene_latest_pathogenic_entry_date(clinvarome_df, compare_variant)
     if gnomad:
         gene_AF_df = get_AF_max_by_gene(gene_AF)
         gene_nhomalt_df = get_max_nhomalt_by_gene(var_nhomalt)
