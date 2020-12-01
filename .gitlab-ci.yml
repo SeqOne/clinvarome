@@ -1,18 +1,14 @@
-test luigi-mansion lib:
+test clinvarome lib:
   image: registry.gitlab.seq.one/devops/dockerfiles/java8-python3-7-htslib:3.7-hts1.10.2
   stage: tool_test
   script:
-    - cd luigi-mansion
+    - cd tools/clinvarome
     - poetry run flake8
-    - poetry run pytest -v --cov-report xml:luigi_mansion_cov.xml --cov-report term --junit-xml luigi_mansion_coverage.xml --cov=luigi_mansion/
-  coverage: '/TOTAL.*\s+(\d+%)$/'
-  artifacts:
-    reports:
-      junit: luigi_mansion_coverage.xml
+    - poetry run pytest -v
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       changes:
-        - luigi-mansion/**/*
+        - tools/clinvarome/**/*
   retry:
     max: 2
     when:
@@ -20,32 +16,3 @@ test luigi-mansion lib:
   cache: {}
   tags:
     - docker-executor
-
-#################
-# RELEASE
-#################
-release luigi-mansion:
-  extends: .semantic-release-monorepo
-  variables:
-    PROJECT_LOCATION: "luigi-mansion"
-    PROJECT_SLUG: "luigi-mansion"
-
-#################
-# DELIVERY_LIB
-#################
-delivery luigi-mansion lib:
-  image: python:3.6-stretch
-  stage: lib_delivery
-  script:
-    - pip install poetry==0.12.17
-    - sed -ri "s|version = \"0.0.0\"|version = \"$CI_COMMIT_REF_NAME\"|" pyproject.toml
-    - poetry build
-    - poetry config repositories.seqone $SEQONE_PYPI_REPOSITORY
-    - poetry config http-basic.seqone $SEQONE_PYPI_USERNAME $SEQONE_PYPI_PASSWORD
-    - poetry publish -r seqone
-  tags:
-    - docker-executor
-  rules:
-    - if: "$CI_COMMIT_TAG"
-      changes:
-        - luigi-mansion/**/*
