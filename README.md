@@ -25,20 +25,16 @@ ClinVarome annotation is developped in `python > 3.6`, and need `Genome Alert!` 
 
 ## Quick start
 
-You need to have installed Variant Alert! [https://github.com/SeqOne/variant_alert](https://github.com/SeqOne/variant_alert) and output VCFs from clinVCF in a folder [https://github.com/SeqOne/clinvcf](https://github.com/SeqOne/clinvcf).
-
 ```bash
-# Go in the Variant Alert! repository and launch virtual environment
-cd variant_alert/
-poetry shell
-
-# Process Variant Alert! data for every months
-cd clinvarome/
-python variant_alert_execution.py --vcf-path VCF_PATH --VA-output-path OUTPUT_PATH
-
-# Annotate ClinVarome
-
-python clinvarome_annotation.py --vcf VCF_FILE --clinvarome CLINVAROME_FILE_TO_ANNOTATE --compare-gene OUTPUT_PATH/compare-gene_total.tsv --compare-variant OUTPUT_PATH/compare-variant_total.tsv --output-dir OUTPUT_DIR/
+poetry install
+#For testing
+mkdir OUTPUT_DIR
+poetry run clinvarome/clinvarome_annotation.py \
+  --vcf tests/full_data/clinvar_GRCh38_2020-11.vcf.gz \
+  --clinvarome tests/full_data/clinvarome_20201031.tsv \
+  --compare-gene tests/full_data/compare-gene_total.tsv.gz \
+  --compare-variant tests/full_data/compare-variant_total.tsv.gz \
+  --output-dir OUTPUT_DIR/
 ```
 
 ## Usage
@@ -53,21 +49,21 @@ usage: clinvarome_annotation.py [-h] --vcf VCF_FILE --clinvarome CLINVAROME
 Add additional annotations to the ClinVarome.
 
 optional arguments:
-  -h, --help            show this help message and exit
-  --vcf VCF_FILE        vcf input from clinVCF
+  -h, --help              show this help message and exit
+  --vcf        VCF_FILE   vcf input from clinVCF
   --clinvarome CLINVAROME
-                        ClinVarome file from Variant Alert! to be annotated.
+                          ClinVarome file from Variant Alert! to be annotated.
   --compare-gene COMPARE_GENE
-                        Variant Alert! compare gene concatenation file of all
-                        previous ClinVar release.
+                          Variant Alert! compare gene concatenation file of all
+                          previous ClinVar release.
   --compare-variant COMPARE_VARIANT
-                        Variant Alert! compare variant concatenation file of
-                        all previous ClinVar release.
-  --gnomad              Add max pathogenic gnomAD filtered allele frequency
-                        for each gene, if clinVCF is annotated with gnomAD v3
-                        by vcfanno.
+                          Variant Alert! compare variant concatenation file of
+                          all previous ClinVar release.
+  --gnomad                Add max pathogenic gnomAD filtered allele frequency
+                          for each gene, if clinVCF is annotated with gnomAD v3
+                          by vcfanno.
   --output-dir OUTPUT_DIR
-                        Path to the output folder.
+                          Path to the output folder.
 ```
 
 ### Output format
