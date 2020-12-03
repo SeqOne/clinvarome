@@ -17,23 +17,3 @@ test clinvarome lib:
   cache: {}
   tags:
     - docker-executor
-
-#################
-# DELIVERY_LIB
-#################
-delivery luigi-mansion lib:
-  image: python:3.6-stretch
-  stage: lib_delivery
-  script:
-    - pip install poetry==0.12.17
-    - sed -ri "s|version = \"0.0.0\"|version = \"$CI_COMMIT_REF_NAME\"|" pyproject.toml
-    - poetry build
-    - poetry config repositories.seqone $SEQONE_PYPI_REPOSITORY
-    - poetry config http-basic.seqone $SEQONE_PYPI_USERNAME $SEQONE_PYPI_PASSWORD
-    - poetry publish -r seqone
-  tags:
-    - docker-executor
-  rules:
-    - if: "$CI_COMMIT_TAG"
-      changes:
-        - tools/clinvarome/**/*
