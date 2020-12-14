@@ -4,7 +4,7 @@ from clinvarome.clinvarome_annotation import run_pipeline
 
 
 @pytest.mark.integration
-def test_pipeline_cnv():
+def test_pipeline():
     # Check if the pipeline run complete
     vcf_file = "tests/full_data/clinvar_GRCh38_2020-11.vcf.gz"
     clinvarome = "tests/full_data/clinvarome_20201031.tsv"

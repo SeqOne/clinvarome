@@ -6,7 +6,6 @@ import pandas as pd
 import numpy as np
 import pysam
 from scipy.stats import poisson
-from pyselib.logger.logger import get_logger
 from sklearn.preprocessing import QuantileTransformer
 from sklearn.cluster import AgglomerativeClustering
 from clinvarome.utils.dictionary import (
@@ -16,8 +15,23 @@ from clinvarome.utils.dictionary import (
     ARRAY_TRANSFORM,
     CLUSTER_NAMES,
 )
+import logging
+
+# For logs
+
+
+def get_logger(scope: str, level=logging.DEBUG):
+    """
+    get_logger
+    """
+    logging.basicConfig(
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=level
+    )
+    return logging.getLogger(scope)
+
 
 logger = get_logger(__name__)
+
 
 # Clinical features
 
