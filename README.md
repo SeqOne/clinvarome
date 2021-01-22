@@ -25,13 +25,22 @@ ClinVarome annotation is developped in `python > 3.6`, and need `Genome Alert!` 
 
 ## Quick start
 
+ClinVarome annotation need for a ClinVar release :
+
+- a VCF file from [ClinVCF](https://github.com/SeqOne/clinvcf)
+- a ClinVarome file from [Variant Alert!](https://github.com/SeqOne/variant_alert)
+- a concatenated file of all [Variant Alert!](https://github.com/SeqOne/variant_alert) compare-variant output (compare-variant_total.tsv.gz)
+- a concatenated file of all [Variant Alert!](https://github.com/SeqOne/variant_alert) compare-gene output (compare-gene_total.tsv.gz)
+
+Run ClinVarome
+
 ```bash
 poetry install
 #For testing
 mkdir OUTPUT_DIR
 poetry run clinvarome/clinvarome_annotation.py \
-  --vcf tests/full_data/clinvar_GRCh38_2020-11.vcf.gz \
-  --clinvarome tests/full_data/clinvarome_20201031.tsv \
+  --vcf tests/full_data/clinvar_GRCh38_{latest}.vcf.gz \
+  --clinvarome tests/full_data/clinvarome_{latest}.tsv \
   --compare-gene tests/full_data/compare-gene_total.tsv.gz \
   --compare-variant tests/full_data/compare-variant_total.tsv.gz \
   --output-dir OUTPUT_DIR/
@@ -69,10 +78,6 @@ optional arguments:
 ### Output format
 
 ClinVarome annotation generate an enhanced ClinVarome TSV (file with additional suffix `_clinvarome_annotation.tsv`).
-
-## Validation experiments
-
-Two experiment notebooks are available that follow the upcoming publication of `Genome Alert!` (`Figure_1.ipynb` and `Figure_2.ipynb`).
 
 ---
 
