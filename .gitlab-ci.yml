@@ -1,3 +1,6 @@
+stages:
+  - test
+
 test clinvarome lib:
   image: registry.gitlab.seq.one/devops/dockerfiles/python:3.7.9-docker-compose-migrate-htslib
   stage: test
