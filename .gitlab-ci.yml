@@ -5,7 +5,6 @@ test clinvarome lib:
   image: registry.gitlab.seq.one/devops/dockerfiles/python:3.7.9-docker-compose-migrate-htslib
   stage: test
   script:
-    - cd tools/clinvarome
     - poetry install
     - poetry run flake8
     - poetry run pytest -v
