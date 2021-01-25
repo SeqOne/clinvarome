@@ -66,4 +66,4 @@ ARRAY_TRANSFORM = {
     "Likely_pathogenic": 0,
 }
 
-CLUSTER_NAMES = {0: "3 stars", 1: "2 stars", 2: "0 star", 3: "1 star"}
+CLUSTER_NAMES = {0: "1st cluster", 1: "2nd cluster", 2: "3rd cluster", 3: "4th cluster"}
