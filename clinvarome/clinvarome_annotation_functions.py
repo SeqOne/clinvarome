@@ -427,6 +427,25 @@ def clusterize_clinvarome(clinvarome_annotation, ARRAY_TRANSFORM):
     clinvarome_clusterized = pd.concat([clinvarome_annotation, renamed_cluster], axis=1)
     return clinvarome_clusterized
 
+# Clustering confidence score 
+
+def clusterize_clinvarome_manually(clinvarome_annotation):
+    """
+    Set cluster status according to cluster exploration in Genome Alert! manuscript
+    """
+    clinvarome_annotation_dict = clinvarome_annotation.to_dict(orient='index')
+    dict_genes = {}
+    for gene, values in clinvarome_annotation_dict.items():
+        dict_genes[gene] = values
+        if values['highest_pathogenic_class'] == "Likely_pathogenic":
+            dict_genes[gene]['cluster_name'] = "4th cluster"
+        elif values['highest_review_confidence'] in ["criteria_provided,_multiple_submitters,_no_conflicts", 'practice_guideline', 'reviewed_by_expert_panel']:
+            dict_genes[gene]['cluster_name'] = "1th cluster"
+        elif (values['highest_pathogenic_class'] == "Pathogenic") and (values['date_between_first_date'] != 0):
+            dict_genes[gene]['cluster_name'] = "2th cluster"
+        else:
+            dict_genes[gene]['cluster_name'] = "3rd cluster"
+    return pd.DataFrame.from_dict(dict_genes, orient='index')  
 
 # Main function
 
@@ -496,8 +515,10 @@ def gather_annotation(vcf_file, clinvarome, compare_gene, compare_variant, gnoma
         }
     )
     logger.info("Clinical validity gene score attribution")
-    clinvarome_annotation_score = clusterize_clinvarome(
-        clinvarome_annotation_total, ARRAY_TRANSFORM
+    #clinvarome_annotation_score = clusterize_clinvarome(
+    #    clinvarome_annotation_total, ARRAY_TRANSFORM
+    #)
+    clinvarome_annotation_score = clusterize_clinvarome_manually(
+        clinvarome_annotation_total
     )
-
     return clinvarome_annotation_score
