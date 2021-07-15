@@ -193,11 +193,7 @@ def get_mol_consequences_dataframe(gene_var_dict):
             df_tot = df_tot.append(df)
     df_tot.index.name = "gene_info"
     df_tot_piv = pd.pivot_table(
-        df_tot,
-        values="count",
-        index="gene_info",
-        columns=["mecanism"],
-        fill_value=0,
+        df_tot, values="count", index="gene_info", columns=["mecanism"], fill_value=0,
     )
 
     return df_tot_piv
@@ -248,9 +244,7 @@ def gene_first_pathogenic_entry_date(clinvarome_df, compare_gene):
     compare_gene_df = compare_gene_df.sort_values(by="name_clinvar_new", ascending=True)
     compare_gene_df.drop_duplicates("gene_info", inplace=True)
     clinvar_gene = clinvarome_df[["gene_info"]].merge(
-        compare_gene_df[["gene_info", "name_clinvar_new"]],
-        on="gene_info",
-        how="outer",
+        compare_gene_df[["gene_info", "name_clinvar_new"]], on="gene_info", how="outer",
     )
     clinvar_gene.fillna(value="20170703", inplace=True)
     clinvar_gene["name_clinvar_new"] = pd.to_datetime(
@@ -380,72 +374,81 @@ def date_management(clinvarome_df):
 # Automatic clustering confidence score
 
 
-def scale_clinvarome_data(clinvarome_annotation, ARRAY_TRANSFORM):
-    """
-    Quantile scale the 4 features needed for clustering.
-    """
-    clinvarome_cluster = clinvarome_annotation[
-        [
-            "date_between_first_date",
-            "variant_number",
-            "highest_review_confidence",
-            "highest_pathogenic_class",
-        ]
-    ]
-    clinvarome_cluster = clinvarome_cluster.replace(ARRAY_TRANSFORM)
-    clinvarome_cluster_array = np.array(clinvarome_cluster.fillna(0))
-    scaler = QuantileTransformer(n_quantiles=10, random_state=0)
-    scale_clinvarome = scaler.fit_transform(clinvarome_cluster_array)
-    scale_clinvarome_df = pd.DataFrame(
-        scale_clinvarome, columns=clinvarome_cluster.columns
-    )
-    return scale_clinvarome_df
+# def scale_clinvarome_data(clinvarome_annotation, ARRAY_TRANSFORM):
+#    """
+#    Quantile scale the 4 features needed for clustering.
+#    """
+#    clinvarome_cluster = clinvarome_annotation[
+#        [
+#            "date_between_first_date",
+#            "variant_number",
+#            "highest_review_confidence",
+#            "highest_pathogenic_class",
+#        ]
+#    ]
+#    clinvarome_cluster = clinvarome_cluster.replace(ARRAY_TRANSFORM)
+#    clinvarome_cluster_array = np.array(clinvarome_cluster.fillna(0))
+#    scaler = QuantileTransformer(n_quantiles=10, random_state=0)
+#    scale_clinvarome = scaler.fit_transform(clinvarome_cluster_array)
+#    scale_clinvarome_df = pd.DataFrame(
+#        scale_clinvarome, columns=clinvarome_cluster.columns
+#    )
+#    return scale_clinvarome_df
+#
+#
+# def give_name_to_cluster(cluster_df):
+#    """
+#    Rename cluster to 3-level stars clinical validity of gene classification
+#    """
+#    renamed_df = cluster_df.copy()
+#    for cluster, clinvarome_stars in CLUSTER_NAMES.items():
+#        renamed_df[renamed_df == cluster] = clinvarome_stars
+#    return renamed_df
+#
+#
+# def clusterize_clinvarome(clinvarome_annotation, ARRAY_TRANSFORM):
+#    """
+#    Apply AgglomerativeClustering to data.
+#    Return 3-level stars clinical validity of gene classification.
+#    """
+#    scale_clinvarome_df = scale_clinvarome_data(clinvarome_annotation, ARRAY_TRANSFORM)
+#    cluster = AgglomerativeClustering(
+#        n_clusters=4, affinity="euclidean", linkage="ward"
+#    )
+#    cluster.fit_predict(scale_clinvarome_df)
+#    cluster_name = pd.DataFrame(cluster.labels_, columns=["cluster_name"])
+#    renamed_cluster = give_name_to_cluster(cluster_name)
+#    clinvarome_clusterized = pd.concat([clinvarome_annotation, renamed_cluster], axis=1)
+#    return clinvarome_clusterized
 
 
-def give_name_to_cluster(cluster_df):
-    """
-    Rename cluster to 3-level stars clinical validity of gene classification
-    """
-    renamed_df = cluster_df.copy()
-    for cluster, clinvarome_stars in CLUSTER_NAMES.items():
-        renamed_df[renamed_df == cluster] = clinvarome_stars
-    return renamed_df
+# Clustering confidence score
 
-
-def clusterize_clinvarome(clinvarome_annotation, ARRAY_TRANSFORM):
-    """
-    Apply AgglomerativeClustering to data.
-    Return 3-level stars clinical validity of gene classification.
-    """
-    scale_clinvarome_df = scale_clinvarome_data(clinvarome_annotation, ARRAY_TRANSFORM)
-    cluster = AgglomerativeClustering(
-        n_clusters=4, affinity="euclidean", linkage="ward"
-    )
-    cluster.fit_predict(scale_clinvarome_df)
-    cluster_name = pd.DataFrame(cluster.labels_, columns=["cluster_name"])
-    renamed_cluster = give_name_to_cluster(cluster_name)
-    clinvarome_clusterized = pd.concat([clinvarome_annotation, renamed_cluster], axis=1)
-    return clinvarome_clusterized
-
-# Clustering confidence score 
 
 def clusterize_clinvarome_manually(clinvarome_annotation):
     """
     Set cluster status according to cluster exploration in Genome Alert! manuscript
     """
-    clinvarome_annotation_dict = clinvarome_annotation.to_dict(orient='index')
+    clinvarome_annotation_dict = clinvarome_annotation.to_dict(orient="index")
     dict_genes = {}
     for gene, values in clinvarome_annotation_dict.items():
         dict_genes[gene] = values
-        if values['highest_pathogenic_class'] == "Likely_pathogenic":
-            dict_genes[gene]['cluster_name'] = "4th cluster"
-        elif values['highest_review_confidence'] in ["criteria_provided,_multiple_submitters,_no_conflicts", 'practice_guideline', 'reviewed_by_expert_panel']:
-            dict_genes[gene]['cluster_name'] = "1th cluster"
-        elif (values['highest_pathogenic_class'] == "Pathogenic") and (values['date_between_first_date'] != 0):
-            dict_genes[gene]['cluster_name'] = "2th cluster"
+        if values["highest_pathogenic_class"] == "Likely_pathogenic":
+            dict_genes[gene]["cluster_name"] = "4th cluster"
+        elif values["highest_review_confidence"] in [
+            "criteria_provided,_multiple_submitters,_no_conflicts",
+            "practice_guideline",
+            "reviewed_by_expert_panel",
+        ]:
+            dict_genes[gene]["cluster_name"] = "1th cluster"
+        elif (values["highest_pathogenic_class"] == "Pathogenic") and (
+            values["date_between_first_date"] != 0
+        ):
+            dict_genes[gene]["cluster_name"] = "2th cluster"
         else:
-            dict_genes[gene]['cluster_name'] = "3rd cluster"
-    return pd.DataFrame.from_dict(dict_genes, orient='index')  
+            dict_genes[gene]["cluster_name"] = "3rd cluster"
+    return pd.DataFrame.from_dict(dict_genes, orient="index")
+
 
 # Main function
 
@@ -515,9 +518,9 @@ def gather_annotation(vcf_file, clinvarome, compare_gene, compare_variant, gnoma
         }
     )
     logger.info("Clinical validity gene score attribution")
-    #clinvarome_annotation_score = clusterize_clinvarome(
+    # clinvarome_annotation_score = clusterize_clinvarome(
     #    clinvarome_annotation_total, ARRAY_TRANSFORM
-    #)
+    # )
     clinvarome_annotation_score = clusterize_clinvarome_manually(
         clinvarome_annotation_total
     )
