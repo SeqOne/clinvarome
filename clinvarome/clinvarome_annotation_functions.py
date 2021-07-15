@@ -431,7 +431,7 @@ def clusterize_clinvarome_manually(clinvarome_annotation):
     """
     Set cluster status according to cluster exploration in Genome Alert! manuscript
     # Cluster with a validation event
-    1st cluster : highest_review_confidence >= 2 stars 
+    1st cluster : highest_review_confidence >= 2 stars
     2nd cluster : date_between_first_date != 0 (meaning entries of an additional pathogenic variant in another date)
     # Cluster without validation event
     3rd cluster: gene with a pathogenic variant (class 5) without another events
