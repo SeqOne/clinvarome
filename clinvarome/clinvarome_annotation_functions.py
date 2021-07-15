@@ -2,18 +2,20 @@
 # Gather all genes annotations : gene, gene_id,
 # (AF, FAF,) diseases, clinical features, mecanismes counts, nhomalt.
 # Give score for genes according their confidence criteria
+# Commented code is the lines needed to make the AgglomerativeClustering
 import pandas as pd
 import numpy as np
 import pysam
 from scipy.stats import poisson
-from sklearn.preprocessing import QuantileTransformer
-from sklearn.cluster import AgglomerativeClustering
+
+# from sklearn.preprocessing import QuantileTransformer
+# from sklearn.cluster import AgglomerativeClustering
 from clinvarome.utils.dictionary import (
     EFFECTS,
     MC_CATEGORIES,
     MC_SHORT,
-    ARRAY_TRANSFORM,
-    CLUSTER_NAMES,
+    # ARRAY_TRANSFORM,
+    # CLUSTER_NAMES,
 )
 import logging
 
