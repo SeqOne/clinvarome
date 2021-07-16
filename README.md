@@ -83,8 +83,9 @@ ClinVarome annotation generate an enhanced ClinVarome TSV (file with additional 
 
 ## How to cite
 
-If you use a tool of the Genome Alert! framework, please cite : 
-> Yauy et al., Genome Alert!: a standardized procedure for genomic variant reinterpretation and automated genotype-phenotype reassessment in clinical routine. medRxiv (2021).
+If you use a tool of the Genome Alert! framework, please cite:
+> Yauy et al., Genome Alert!: a standardized procedure for genomic variant reinterpretation and automated genotype-phenotype reassessment in clinical routine. medRxiv (2021). [https://doi.org/10.1101/2021.07.13.21260422
+](https://www.medrxiv.org/content/10.1101/2021.07.13.21260422v1)
 
 ## Misc
 
