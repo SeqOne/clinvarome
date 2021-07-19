@@ -87,6 +87,10 @@ If you use a tool of the Genome Alert! framework, please cite:
 > Yauy et al., Genome Alert!: a standardized procedure for genomic variant reinterpretation and automated genotype-phenotype reassessment in clinical routine. medRxiv (2021). [https://doi.org/10.1101/2021.07.13.21260422
 ](https://www.medrxiv.org/content/10.1101/2021.07.13.21260422v1)
 
+## License
+
+**ClinVarome** is licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for the full license text.
+
 ## Misc
 
 **ClinVarome** is a part of the [**Genome Alert!** framework](https://github.com/SeqOne/GenomeAlert_app), a collaboration of :
